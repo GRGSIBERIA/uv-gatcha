@@ -6,11 +6,20 @@ Shader "Tutorial/Textured Colored" {
     }
     SubShader
     {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "LightMode" = "ForwardBase"
+        }
+        LOD 200
+
         Pass    // 主線の描画
         {
+            Cull Front
             CGPROGRAM
             #pragma vertex Vertex_Main
             #pragma fragment Fragment_Main
+            #pragma target 4.0
 
             #include "UnityCG.cginc"
 
@@ -29,7 +38,6 @@ Shader "Tutorial/Textured Colored" {
             struct vert2frag {
                 float4 pos : SV_POSITION;
                 float3 normal : NORMAL;
-                uint vid : SV_VertexID;
             };
 
             vert2frag Vertex_Main(hard2vert v)
@@ -38,7 +46,6 @@ Shader "Tutorial/Textured Colored" {
 
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normal);
-                o.vid = v.vid;
 
                 return o;
             }
@@ -53,9 +60,11 @@ Shader "Tutorial/Textured Colored" {
         }
         Pass    // 表面の描画
         {
+            Cull Back
             CGPROGRAM
             #pragma vertex Vertex_Main
             #pragma fragment Fragment_Main
+            #pragma target 4.0
 
             #include "UnityCG.cginc"
 
@@ -74,7 +83,6 @@ Shader "Tutorial/Textured Colored" {
             struct vert2frag {
                 float4 pos : SV_POSITION;
                 float3 normal : NORMAL;
-                uint vid : SV_VertexID;
             };
 
             vert2frag Vertex_Main(hard2vert v)
@@ -83,7 +91,6 @@ Shader "Tutorial/Textured Colored" {
 
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normal);
-                o.vid = v.vid;
 
                 return o;
             }
